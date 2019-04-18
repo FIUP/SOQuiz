@@ -9,6 +9,21 @@
     <script src="engine.js"></script>    
 </head>
 <body>
+    <input type="checkbox" name="compitini" value="1">Compitino 1 <br>
+    <input type="checkbox" name="compitini" value="2">Compitino 2 <br>
     <div id="frame" role="content"></div>
+
+    <script>
+
+      if(document.getElementsByName("compitini")[0].checked == true){
+        compitino1 = true;
+      }
+      if(document.getElementsByName("compitini")[1].checked == true){
+        compitino2 = true;
+      }
+            
+    </script>
+
+    
 </body>
 </html>
