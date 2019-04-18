@@ -1,7 +1,9 @@
 /******* Le domande sono contenute dentro al file "domande.js" *******/
 
 /******* No need to edit below this line *******/
-var currentquestion = 0, score = 0, submt=true, picked;
+let currentquestion = 0, score = 0, submt=true, picked;
+let compitino1 = false;
+let compitino2 = false
 
 jQuery(document).ready(function($){
     /**
@@ -115,7 +117,8 @@ jQuery(document).ready(function($){
      * Runs the first time and creates all of the elements for the quiz
      */
     function init(){
-        shuffle(quiz);
+        shuffle(quizCompitino1);
+        shuffle(quizCompitino2);
         //add title
         if(typeof quiztitle !== "undefined" && $.type(quiztitle) === "string"){
             $(document.createElement('h1')).text(quiztitle).appendTo('#frame');
@@ -123,23 +126,61 @@ jQuery(document).ready(function($){
             $(document.createElement('h1')).text("Quiz").appendTo('#frame');
         }
         //add pager and questions
-        if(typeof quiz !== "undefined" && $.type(quiz) === "array"){
+        if(compitino1 && ! compitino2){
+          if(typeof quiz !== "undefined" && $.type(quiz) === "array"){
+              //add pager
+              $(document.createElement('p')).addClass('pager').attr('id','pager').text('Domanda 1 di ' + quizCompitino1.length).appendTo('#frame');
+              //add first question
+              $(document.createElement('h2')).addClass('question').attr('id', 'question').text(quizCompitino1[0]['question']).appendTo('#frame');
+          
+              //questions holder
+              $(document.createElement('ul')).attr('id', 'choice-block').appendTo('#frame');
+          
+              //add choices
+              addChoices(quizCompitino1[0]['choices']);
+          
+              //add submit button
+              $(document.createElement('div')).addClass('choice-box').attr('id', 'submitbutton').text('Check Answer').css({'font-weight':700,'color':'#fff','padding':'30px 0'}).appendTo('#frame');
+          
+              setupButtons();
+          }else if(compitino2 && !compitino1){
             //add pager
-            $(document.createElement('p')).addClass('pager').attr('id','pager').text('Domanda 1 di ' + quiz.length).appendTo('#frame');
+            $(document.createElement('p')).addClass('pager').attr('id','pager').text('Domanda 1 di ' + quizCompitino2.length).appendTo('#frame');
             //add first question
-            $(document.createElement('h2')).addClass('question').attr('id', 'question').text(quiz[0]['question']).appendTo('#frame');
+            $(document.createElement('h2')).addClass('question').attr('id', 'question').text(quizCompitino2[0]['question']).appendTo('#frame');
         
             //questions holder
             $(document.createElement('ul')).attr('id', 'choice-block').appendTo('#frame');
         
             //add choices
-            addChoices(quiz[0]['choices']);
+            addChoices(quizCompitino2[0]['choices']);
         
             //add submit button
             $(document.createElement('div')).addClass('choice-box').attr('id', 'submitbutton').text('Check Answer').css({'font-weight':700,'color':'#fff','padding':'30px 0'}).appendTo('#frame');
         
             setupButtons();
+          }else if(compitino1 && compitino2){
+              //add pager
+              $(document.createElement('p')).addClass('pager').attr('id','pager').text('Domanda 1 di ' + quiz.length).appendTo('#frame');
+
+              //add first question
+              $(document.createElement('h2')).addClass('question').attr('id', 'question').text(quiz[0]['question']).appendTo('#frame');
+
+              //questions holder
+              $(document.createElement('ul')).attr('id', 'choice-block').appendTo('#frame');
+
+              //add choices
+              addChoices(quiz[0]['choices']);
+              
+              //add submit button
+              $(document.createElement('div')).addClass('choice-box').attr('id', 'submitbutton').text('Check Answer').css({'font-weight':700,'color':'#fff','padding':'30px 0'}).appendTo('#frame');
+        
+            setupButtons();
+          }else{
+            window.alert("Errore nella selezione del compitino");
+          }
         }
+        
     }
     
     init();
