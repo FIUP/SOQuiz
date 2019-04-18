@@ -2,8 +2,6 @@
 
 /******* No need to edit below this line *******/
 let currentquestion = 0, score = 0, submt=true, picked;
-let compitino1 = false;
-let compitino2 = false
 
 jQuery(document).ready(function($){
     /**
