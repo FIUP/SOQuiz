@@ -9,28 +9,18 @@
     <script src="engine.js"></script>    
 </head>
 <body>
-    <input type="checkbox" name="compitini" value="1" checked>Compitino 1 <br>
-    <input type="checkbox" name="compitini" value="2">Compitino 2 <br>
+    <br>
+    <p id="p">Seleziona il compitino per cui ti vuoi preparare. Se vuoi preparati per l'appello seleziona entrambi i compitini</p>
+    <br>
+    <div id="selectDiv">
+    		 <select onchange="set()" id="select">
+			<option value="-">---</option>
+			<option value="0">Primo compitino</option>
+			<option value="1">Secondo compitino</option>
+  			<option value="2">Entrambi i compitini</option>
+		</select> 
+    </div>
+    <hr>
     <div id="frame" role="content"></div>
-
-    <script>
-        
-        let compitino1;
-        let compitino2;
-
-      if(document.getElementsByName("compitini")[0].checked == true){
-        compitino1 = true;
-      }else{
-          compitino1 = false;
-      }
-      if(document.getElementsByName("compitini")[1].checked == true){
-        compitino2 = true;
-      }else{
-          compitino2 = false;
-      }
-            
-    </script>
-
-    
 </body>
 </html>
