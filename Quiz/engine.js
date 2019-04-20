@@ -285,6 +285,6 @@ let currentquestion = 0, score = 0, submt=true, picked, compitino1, compitino2;
         }else{
             alert("C'è stato un errore, riseleziona i quiz");
         }
-        //add pager and questions
+        
         
     }
