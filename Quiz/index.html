@@ -9,6 +9,18 @@
     <script src="engine.js"></script>    
 </head>
 <body>
+    <br>
+    <p id="p">Seleziona il compitino per cui ti vuoi preparare. Se vuoi preparati per l'appello seleziona entrambi i compitini</p>
+    <br>
+    <div id="selectDiv">
+    		 <select onchange="set()" id="select">
+			<option value="-">---</option>
+			<option value="0">Primo compitino</option>
+			<option value="1">Secondo compitino</option>
+  			<option value="2">Entrambi i compitini</option>
+		</select> 
+    </div>
+    <hr>
     <div id="frame" role="content"></div>
 </body>
 </html>

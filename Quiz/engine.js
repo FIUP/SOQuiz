@@ -1,13 +1,50 @@
 /******* Le domande sono contenute dentro al file "domande.js" *******/
 
 /******* No need to edit below this line *******/
-var currentquestion = 0, score = 0, submt=true, picked;
+let currentquestion = 0, score = 0, submt=true, picked, compitino1, compitino2;
+    
+    function set(){
+        let val = document.getElementById("select").value;
+        if(val == "-"){
+                alert("Selezione non valida");
+            }else if(val == "0"){
+                $( "#title" ).remove();
+                $( "#compitino" ).remove();
+                $( "#pager" ).remove();
+                $( "#question" ).remove();
+                $( "#choice-block" ).remove();
+                $( "#submitbutton" ).remove();
+                compitino1 = true;
+                compitino2 = false;
+                init();
+            }else if(val == "1"){
+                $( "#title" ).remove();
+                $( "#compitino" ).remove();
+                $( "#pager" ).remove();
+                $( "#question" ).remove();
+                $( "#choice-block" ).remove();
+                $( "#submitbutton" ).remove();
+                compitino1 = false;
+                compitino2 = true;
+                init();
+            }else{
+                $( "#title" ).remove();
+                $( "#compitino" ).remove();
+                $( "#pager" ).remove();
+                $( "#question" ).remove();
+                $( "#choice-block" ).remove();
+                $( "#submitbutton" ).remove();  
+                compitino1 = true;
+                compitino2 = true;
+                init();
+            }
+    }
 
-jQuery(document).ready(function($){
     /**
      * HTML Encoding function for alt tags and attributes to prevent messy
      * data appearing inside tag attributes.
      */
+
     function htmlEncode(value){
       return $(document.createElement('div')).text(value).html();
     }
@@ -41,44 +78,97 @@ jQuery(document).ready(function($){
     /**
      * Resets all of the fields to prepare for next question
      */
-    function nextQuestion(){
+    function nextQuestion(compitino){
         submt = true;
-        $('#question').text(quiz[currentquestion]['question']);
-        $('#pager').text('Domanda ' + Number(currentquestion + 1) + ' di ' + quiz.length);
+        if(compitino == "1"){
+            $('#question').text(quizCompitino1[currentquestion]['question']);
+            $('#pager').text('Domanda ' + Number(currentquestion + 1) + ' di ' + quizCompitino1.length);
         
-        addChoices(quiz[currentquestion]['choices']);
-        setupButtons();
+            addChoices(quizCompitino1[currentquestion]['choices']);
+            setupButtons(compitino);    
+        }else if(compitino == "2"){
+            $('#question').text(quizCompitino2[currentquestion]['question']);
+            $('#pager').text('Domanda ' + Number(currentquestion + 1) + ' di ' + quizCompitino2.length);
+        
+            addChoices(quizCompitino2[currentquestion]['choices']);
+            setupButtons(compitino); 
+        }else{
+            $('#question').text(quiz[currentquestion]['question']);
+            $('#pager').text('Domanda ' + Number(currentquestion + 1) + ' di ' + quiz.length);
+        
+            addChoices(quiz[currentquestion]['choices']);
+            setupButtons(compitino); 
+        }
+        
     }
     /**
      * After a selection is submitted, checks if its the right answer
      *
      * @param {choice} number The li zero-based index of the choice picked
      */
-    function processQuestion(choice){
-        if(quiz[currentquestion]['choices'][choice] == quiz[currentquestion]['correct']){
-            $('.choice').eq(choice).css({'background-color':'#50D943'});
-            $('#explanation').html('<strong>Correct!</strong> ' + htmlEncode(quiz[currentquestion]['explanation']));
-            score++;
-        } else {
-            $('.choice').eq(choice).css({'background-color':'#D92623'});
-            $('#explanation').html('<strong>Incorrect.</strong> ' + htmlEncode(quiz[currentquestion]['explanation']));
+    function processQuestion(choice, compitino){
+        if(compitino == "1"){
+            if(quizCompitino1[currentquestion]['choices'][choice] == quizCompitino1[currentquestion]['correct']){
+                $('.choice').eq(choice).css({'background-color':'#50D943'});
+                $('#explanation').html('<strong>Correct!</strong> ' + htmlEncode(quizCompitino1[currentquestion]['explanation']));
+                score++;
+            } else {
+                $('.choice').eq(choice).css({'background-color':'#D92623'});
+                $('#explanation').html('<strong>Incorrect.</strong> ' + htmlEncode(quizCompitino1[currentquestion]['explanation']));
+            }
+        }else if(compitino == "2"){
+            if(quizCompitino2[currentquestion]['choices'][choice] == quizCompitino2[currentquestion]['correct']){
+                $('.choice').eq(choice).css({'background-color':'#50D943'});
+                $('#explanation').html('<strong>Correct!</strong> ' + htmlEncode(quizCompitino2[currentquestion]['explanation']));
+                score++;
+            } else {
+                $('.choice').eq(choice).css({'background-color':'#D92623'});
+                $('#explanation').html('<strong>Incorrect.</strong> ' + htmlEncode(quizCompitino2[currentquestion]['explanation']));
+            }
+        }else{
+            if(quiz[currentquestion]['choices'][choice] == quiz[currentquestion]['correct']){
+                $('.choice').eq(choice).css({'background-color':'#50D943'});
+                $('#explanation').html('<strong>Correct!</strong> ' + htmlEncode(quiz[currentquestion]['explanation']));
+                score++;
+            } else {
+                $('.choice').eq(choice).css({'background-color':'#D92623'});
+                $('#explanation').html('<strong>Incorrect.</strong> ' + htmlEncode(quiz[currentquestion]['explanation']));
+            }    
         }
+        
 
         currentquestion++;
 
         $('#submitbutton').html('NEXT QUESTION').on('click', function(){
-            if(currentquestion == quiz.length){
-                endQuiz();
-            } else {
-                $(this).text('Check Answer').css({'color':'#fff'}).off('click');
-                nextQuestion();
+            if(compitino == "1"){
+                if(currentquestion == quizCompitino1.length){
+                    endQuiz(compitino);
+                } else {
+                    $(this).text('Check Answer').css({'color':'#fff'}).off('click');
+                    nextQuestion(compitino);
+                }   
+            }else if(compitino == "2"){
+                if(currentquestion == quizCompitino2.length){
+                    endQuiz(compitino);
+                } else {
+                    $(this).text('Check Answer').css({'color':'#fff'}).off('click');
+                    nextQuestion(compitino);
+                }
+            }else{
+                if(currentquestion == quiz.length){
+                    endQuiz(compitino);
+                } else {
+                    $(this).text('Check Answer').css({'color':'#fff'}).off('click');
+                    nextQuestion(compitino);
+                }
             }
+            
         })
     }
     /**
      * Sets up the event listeners for each button.
      */
-    function setupButtons(){
+    function setupButtons(compitino){
         $('.choice').on('mouseover', function(){
             $(this).css({'background-color':'#e1e1e1'});
         });
@@ -94,7 +184,7 @@ jQuery(document).ready(function($){
                 $('#submitbutton').css({'color':'#fff'}).on('click', function(){
                     $('.choice').off('click');
                     $(this).off('click');
-                    processQuestion(picked);
+                    processQuestion(picked, compitino);
                 });
             }
         })
@@ -103,44 +193,98 @@ jQuery(document).ready(function($){
     /**
      * Quiz ends, display a message.
      */
-    function endQuiz(){
+    function endQuiz(compitino){
         $('#explanation').empty();
         $('#question').empty();
         $('#choice-block').empty();
         $('#submitbutton').remove();
-        $('#question').text(score + " corrette su " + quiz.length);
-        $(document.createElement('h2')).css({'text-align':'center', 'font-size':'4em'}).text(Math.round(score/quiz.length * 100) + '%').insertAfter('#question');
+        if(compitino == "1"){
+            $('#question').text(score + " corrette su " + quizCompitino1.length);
+            $(document.createElement('h2')).css({'text-align':'center', 'font-size':'4em'}).text(Math.round(score/quizCompitino1.length * 100) + '%').insertAfter('#question');
+        }else if(compitino == "2"){
+            $('#question').text(score + " corrette su " + quizCompitino2.length);
+            $(document.createElement('h2')).css({'text-align':'center', 'font-size':'4em'}).text(Math.round(score/quizCompitino2.length * 100) + '%').insertAfter('#question');
+        }else{
+            $('#question').text(score + " corrette su " + quiz.length);
+            $(document.createElement('h2')).css({'text-align':'center', 'font-size':'4em'}).text(Math.round(score/quiz.length * 100) + '%').insertAfter('#question');    
+        }        
+        
     }
     /**
      * Runs the first time and creates all of the elements for the quiz
      */
     function init(){
-        shuffle(quiz);
         //add title
         if(typeof quiztitle !== "undefined" && $.type(quiztitle) === "string"){
-            $(document.createElement('h1')).text(quiztitle).appendTo('#frame');
+            $(document.createElement('h1')).text(quiztitle).attr("id", "title").appendTo('#frame');
         } else {
-            $(document.createElement('h1')).text("Quiz").appendTo('#frame');
+            $(document.createElement('h1')).text("Quiz").attr("id", "title").appendTo('#frame');
         }
-        //add pager and questions
-        if(typeof quiz !== "undefined" && $.type(quiz) === "array"){
-            //add pager
-            $(document.createElement('p')).addClass('pager').attr('id','pager').text('Domanda 1 di ' + quiz.length).appendTo('#frame');
-            //add first question
-            $(document.createElement('h2')).addClass('question').attr('id', 'question').text(quiz[0]['question']).appendTo('#frame');
+
+        if(compitino1 && !compitino2){
+            shuffle(quizCompitino1);
+            $(document.createElement('h2')).text("Compitino 1").attr("id", "compitino").appendTo('#frame');   
+            if(typeof quiz !== "undefined" && $.type(quizCompitino1) === "array"){
+                //add pager
+                $(document.createElement('p')).addClass('pager').attr('id','pager').text('Domanda 1 di ' + quizCompitino1.length).appendTo('#frame');
+                //add first question
+                $(document.createElement('h2')).addClass('question').attr('id', 'question').text(quizCompitino1[0]['question']).appendTo('#frame');
         
-            //questions holder
-            $(document.createElement('ul')).attr('id', 'choice-block').appendTo('#frame');
+                //questions holder
+                $(document.createElement('ul')).attr('id', 'choice-block').appendTo('#frame');
         
-            //add choices
-            addChoices(quiz[0]['choices']);
+                //add choices
+                addChoices(quizCompitino1[0]['choices']);
         
-            //add submit button
-            $(document.createElement('div')).addClass('choice-box').attr('id', 'submitbutton').text('Check Answer').css({'font-weight':700,'color':'#fff','padding':'30px 0'}).appendTo('#frame');
+                //add submit button
+                $(document.createElement('div')).addClass('choice-box').attr('id', 'submitbutton').text('Check Answer').css({'font-weight':700,'color':'#fff','padding':'30px 0'}).appendTo('#frame');
         
-            setupButtons();
+                setupButtons("1");
+            }
+
+        }else if(!compitino1 && compitino2){
+            shuffle(quizCompitino2);
+            $(document.createElement('h2')).text("Compitino 2").attr("id", "compitino").appendTo('#frame');
+            if(typeof quiz !== "undefined" && $.type(quizCompitino2) === "array"){
+                //add pager
+                $(document.createElement('p')).addClass('pager').attr('id','pager').text('Domanda 1 di ' + quizCompitino2.length).appendTo('#frame');
+                //add first question
+                $(document.createElement('h2')).addClass('question').attr('id', 'question').text(quizCompitino2[0]['question']).appendTo('#frame');
+        
+                //questions holder
+                $(document.createElement('ul')).attr('id', 'choice-block').appendTo('#frame');
+        
+                //add choices
+                addChoices(quizCompitino2[0]['choices']);
+        
+                //add submit button
+                $(document.createElement('div')).addClass('choice-box').attr('id', 'submitbutton').text('Check Answer').css({'font-weight':700,'color':'#fff','padding':'30px 0'}).appendTo('#frame');
+        
+                setupButtons("2");
+            }
+        }else if(compitino1 && compitino2){
+            shuffle(quiz);
+            $(document.createElement('h2')).text("Entrambi i compitini").attr("id", "compitino").appendTo('#frame');
+            if(typeof quiz !== "undefined" && $.type(quiz) === "array"){
+                 //add pager
+                $(document.createElement('p')).addClass('pager').attr('id','pager').text('Domanda 1 di ' + quiz.length).appendTo('#frame');
+                //add first question
+                $(document.createElement('h2')).addClass('question').attr('id', 'question').text(quiz[0]['question']).appendTo('#frame');
+        
+                //questions holder
+                $(document.createElement('ul')).attr('id', 'choice-block').appendTo('#frame');
+        
+                //add choices
+                addChoices(quiz[0]['choices']);
+        
+                //add submit button
+                $(document.createElement('div')).addClass('choice-box').attr('id', 'submitbutton').text('Check Answer').css({'font-weight':700,'color':'#fff','padding':'30px 0'}).appendTo('#frame');
+        
+                setupButtons("Entrambi");
+            }
+        }else{
+            alert("C'è stato un errore, riseleziona i quiz");
         }
+        
+        
     }
-    
-    init();
-});
